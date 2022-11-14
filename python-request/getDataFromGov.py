@@ -74,6 +74,7 @@ def main(page=1):
     # Output CSV file which will contain information about repositories
     csv_file = open(OUTPUT_CSV_FILE, 'w')
     projects = csv.writer(csv_file, delimiter=',')
+    projects.writerow(TITLE)
 
     data = json.loads(getUrl(URL, QUERYDATA))
 
@@ -83,8 +84,6 @@ def main(page=1):
     print("Number of pages: " + str(numberOfPages))
 
     if page == 1:
-        projects.writerow(TITLE)
-
         # save data to csv
         for item in data[0]['itemList']:
             countOfRepositories = countOfRepositories + 1
