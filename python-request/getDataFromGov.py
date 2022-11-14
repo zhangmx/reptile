@@ -8,6 +8,24 @@ import time
 import csv
 import requests
 import math
+import logging
+import sys
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(message)s')
+
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setLevel(logging.DEBUG)
+stdout_handler.setFormatter(formatter)
+
+file_handler = logging.FileHandler('projects.log')
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(formatter)
+
+
+logger.addHandler(file_handler)
+logger.addHandler(stdout_handler)
 
 #############
 # Constants #
@@ -143,19 +161,19 @@ def test_data_structure(page=1):
     print()
     print(data[0]['itemList'][0])
     print()
-    print(data[0]['itemList'][0]['deal_code'])  # 项目代码
-    print(data[0]['itemList'][0]['DEAL_STATE'])  # 项目状态
-    print(data[0]['itemList'][0]['DEAL_TIME'])  # 办理时间
-    print(data[0]['itemList'][0]['apply_project_name'])  # 项目名称
-    print(data[0]['itemList'][0]['ITEM_NAME'])  # 审批监管事项
-    print(data[0]['itemList'][0]['DEAL_NAME'])  # 办理状态
-    print(data[0]['itemList'][0]['DEPT_NAME'])  # 管理部门
-    print(data[0]['itemList'][0]['projectuuid'])
-    print(data[0]['itemList'][0]['SENDID'])
+    logger.info(data[0]['itemList'][0]['deal_code'])  # 项目代码
+    logger.info(data[0]['itemList'][0]['DEAL_STATE'])  # 项目状态
+    logger.info(data[0]['itemList'][0]['DEAL_TIME'])  # 办理时间
+    logger.info(data[0]['itemList'][0]['apply_project_name'])  # 项目名称
+    logger.info(data[0]['itemList'][0]['ITEM_NAME'])  # 审批监管事项
+    logger.info(data[0]['itemList'][0]['DEAL_NAME'])  # 办理状态
+    logger.info(data[0]['itemList'][0]['DEPT_NAME'])  # 管理部门
+    logger.info(data[0]['itemList'][0]['projectuuid'])
+    logger.info(data[0]['itemList'][0]['SENDID'])
 
     time.sleep(DELAY_BETWEEN_QUERIES)
 
-    print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+    logger.info(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
     csv_file = open(OUTPUT_CSV_FILE, 'w')
     repositories = csv.writer(csv_file, delimiter=',')

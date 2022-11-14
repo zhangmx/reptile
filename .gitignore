@@ -1,4 +1,5 @@
 # Default ignored files
 /.idea
 /python-request/out/projects.csv
+*.log
 
