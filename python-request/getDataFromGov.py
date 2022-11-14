@@ -32,24 +32,24 @@ TITLE = ['项目代码', '项目状态', '办理时间', '项目名称', '审批
          'SENDID']
 
 HEADERS = {
-'Accept': 'application/json, text/javascript, */*; q=0.01',
-'Accept-Encoding': 'gzip, deflate, br',
-'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6',
-'Connection': 'keep-alive',
-'Content-Length': '70',
-'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-'Cookie': 'JSESSIONID=E162FD2E7981254220D17C362B5D752A; SERVERID=e59cb5cf86bbeeff4488d95f21828741|1668405732|1668405582',
-'Host': 'tzxm.zjzwfw.gov.cn',
-'Origin': 'https://tzxm.zjzwfw.gov.cn',
-'Referer': 'https://tzxm.zjzwfw.gov.cn/tzxmweb/zwtpages/resultsPublicity/notice_of_publicity.html',
-'Sec-Fetch-Dest': 'empty',
-'Sec-Fetch-Mode': 'cors',
-'Sec-Fetch-Site': 'same-origin',
-'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
-'X-Requested-With': 'XMLHttpRequest',
-'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-'sec-ch-ua-mobile': '?0',
-'sec-ch-ua-platform': '"macOS"'
+    'Accept': 'application/json, text/javascript, */*; q=0.01',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6',
+    'Connection': 'keep-alive',
+    'Content-Length': '70',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'Cookie': 'JSESSIONID=E162FD2E7981254220D17C362B5D752A; SERVERID=e59cb5cf86bbeeff4488d95f21828741|1668405732|1668405582',
+    'Host': 'tzxm.zjzwfw.gov.cn',
+    'Origin': 'https://tzxm.zjzwfw.gov.cn',
+    'Referer': 'https://tzxm.zjzwfw.gov.cn/tzxmweb/zwtpages/resultsPublicity/notice_of_publicity.html',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
+    'X-Requested-With': 'XMLHttpRequest',
+    'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"macOS"'
 }
 
 
@@ -67,14 +67,13 @@ def getUrl(url, data):
 ########
 # MAIN #
 ########
-def main():
+def main(page=1):
     # To save the number of repositories processed
     countOfRepositories = 0
 
     # Output CSV file which will contain information about repositories
     csv_file = open(OUTPUT_CSV_FILE, 'w')
     projects = csv.writer(csv_file, delimiter=',')
-    projects.writerow(TITLE)
 
     data = json.loads(getUrl(URL, QUERYDATA))
 
@@ -82,23 +81,36 @@ def main():
 
     numberOfPages = int(math.ceil(float(data[0]['counts']) / 10.0))
     print("Number of pages: " + str(numberOfPages))
-    # save data to csv
-    for item in data[0]['itemList']:
-        countOfRepositories = countOfRepositories + 1
-        projects.writerow(item.values())
 
-    print("Sleeping " + str(DELAY_BETWEEN_QUERIES) + " seconds before the new query ...")
-    time.sleep(DELAY_BETWEEN_QUERIES)
+    if page == 1:
+        projects.writerow(TITLE)
 
-    for i in range(1, numberOfPages + 1):
-        print("No. of pages = " + str(i))
-        QUERYDATA['pageNo'] = i
-        data = json.loads(getUrl(URL, QUERYDATA))
-        # data = json.loads(json.dumps(getUrl(URL, QUERYDATA)))
         # save data to csv
         for item in data[0]['itemList']:
             countOfRepositories = countOfRepositories + 1
             projects.writerow(item.values())
+
+    print("Sleeping " + str(DELAY_BETWEEN_QUERIES) + " seconds before the new query ...")
+    time.sleep(DELAY_BETWEEN_QUERIES)
+
+    for i in range(page, numberOfPages + 1):
+        print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + "No. of pages = " + str(i))
+        QUERYDATA['pageNo'] = i
+        try:
+            data = json.loads(getUrl(URL, QUERYDATA))
+            # data = json.loads(json.dumps(getUrl(URL, QUERYDATA)))
+            for item in data[0]['itemList']:
+                countOfRepositories = countOfRepositories + 1
+                projects.writerow(item.values())
+        except:
+            print("Error with page " + str(i))
+
+            # data = json.loads(getUrl(URL, QUERYDATA))
+            # # data = json.loads(json.dumps(getUrl(URL, QUERYDATA)))
+            # # save data to csv
+            # for item in data[0]['itemList']:
+            #     countOfRepositories = countOfRepositories + 1
+            #     projects.writerow(item.values())
 
         print("Sleeping " + str(DELAY_BETWEEN_QUERIES) + " seconds before the new query ...")
         time.sleep(DELAY_BETWEEN_QUERIES)
@@ -111,12 +123,18 @@ def main():
     csv_file.close()
 
 
-def test_data_structure():
+def test_data_structure(page=1):
     # get file content from /target-site/res.txt
     with open('../target-site/res.txt', 'r') as f:
         data = json.loads(f.read())
         # data = json.loads(json.dumps(f.read()))
     #
+
+    # print current time
+    print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+    print()
+    print(page)
+    print()
 
     print(data)
 
@@ -126,15 +144,19 @@ def test_data_structure():
     print()
     print(data[0]['itemList'][0])
     print()
-    print(data[0]['itemList'][0]['deal_code']) # 项目代码
-    print(data[0]['itemList'][0]['DEAL_STATE']) # 项目状态
+    print(data[0]['itemList'][0]['deal_code'])  # 项目代码
+    print(data[0]['itemList'][0]['DEAL_STATE'])  # 项目状态
     print(data[0]['itemList'][0]['DEAL_TIME'])  # 办理时间
-    print(data[0]['itemList'][0]['apply_project_name']) # 项目名称
-    print(data[0]['itemList'][0]['ITEM_NAME']) # 审批监管事项
-    print(data[0]['itemList'][0]['DEAL_NAME']) # 办理状态
-    print(data[0]['itemList'][0]['DEPT_NAME']) # 管理部门
+    print(data[0]['itemList'][0]['apply_project_name'])  # 项目名称
+    print(data[0]['itemList'][0]['ITEM_NAME'])  # 审批监管事项
+    print(data[0]['itemList'][0]['DEAL_NAME'])  # 办理状态
+    print(data[0]['itemList'][0]['DEPT_NAME'])  # 管理部门
     print(data[0]['itemList'][0]['projectuuid'])
     print(data[0]['itemList'][0]['SENDID'])
+
+    time.sleep(DELAY_BETWEEN_QUERIES)
+
+    print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
     csv_file = open(OUTPUT_CSV_FILE, 'w')
     repositories = csv.writer(csv_file, delimiter=',')
@@ -150,5 +172,5 @@ def test_data_structure():
 
 # main
 if __name__ == "__main__":
-    main()
-    # test_data_structure()
+    # main()
+    test_data_structure()
