@@ -1,0 +1,43 @@
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6
+Connection: keep-alive
+Content-Length: 70
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Cookie: JSESSIONID=E162FD2E7981254220D17C362B5D752A; SERVERID=e59cb5cf86bbeeff4488d95f21828741|1668405732|1668405582
+Host: tzxm.zjzwfw.gov.cn
+Origin: https://tzxm.zjzwfw.gov.cn
+Referer: https://tzxm.zjzwfw.gov.cn/tzxmweb/zwtpages/resultsPublicity/notice_of_publicity.html
+sec-ch-ua: "Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36
+X-Requested-With: XMLHttpRequest
+
+
+
+POST /publicannouncement.do?method=queryItemList HTTP/1.1
+
+
+
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6
+Connection: keep-alive
+Content-Length: 70
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Cookie: JSESSIONID=E162FD2E7981254220D17C362B5D752A; SERVERID=e59cb5cf86bbeeff4488d95f21828741|1668405732|1668405582
+Host: tzxm.zjzwfw.gov.cn
+Origin: https://tzxm.zjzwfw.gov.cn
+Referer: https://tzxm.zjzwfw.gov.cn/tzxmweb/zwtpages/resultsPublicity/notice_of_publicity.html
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36
+X-Requested-With: XMLHttpRequest
+sec-ch-ua: "Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
