@@ -13,6 +13,7 @@ import requests
 # OUTPUT_FOLDER = "/your/folder/GitHub-Crawler/"  # Folder where ZIP files will be stored
 OUTPUT_FOLDER = os.path.join(os.getcwd(), "out")
 OUTPUT_CSV_FILE = os.path.join(OUTPUT_FOLDER, "projects.csv")  # Path to the CSV file generated as output
+OUTPUT_CSV_FILE_LOST = os.path.join(OUTPUT_FOLDER, "projects_lost.csv")  # Path to the CSV file generated as output
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -151,11 +152,16 @@ def main(page=1):
             else:
                 logger.info("No data in page " + str(i))
 
+                # TODO save the page number to a file
+
+                # get data one more time
                 count_of_repositories = get_data_more_time(i, projects, count_of_repositories)
 
         except Exception as e:
             logger.info("Error with page " + str(i))
             logging.exception(e)
+
+            # TODO save the page number to a file
 
             # data = json.loads(getUrl(URL, QUERYDATA))
             # # data = json.loads(json.dumps(getUrl(URL, QUERYDATA)))
@@ -173,6 +179,54 @@ def main(page=1):
 
     logger.info("DONE! " + str(count_of_repositories) + " projects have been processed.")
     csv_file.close()
+
+
+def get_all_lost_page():
+    pages = [288, 289, 290, 1037]
+    fetch_all_lost_page(pages)
+
+
+def fetch_all_lost_page(pages=None):
+    count_of_repositories = 0
+
+    csv_file = open(OUTPUT_CSV_FILE_LOST, 'w')
+    projects = csv.writer(csv_file, delimiter=',')
+    projects.writerow(TITLE)
+
+    if pages is None:
+        pages = []
+    for page in pages:
+        count_of_repositories = fetch_specific_page_data(page, projects, count_of_repositories)
+
+    logger.info("DONE! " + str(count_of_repositories) + " projects have been processed.")
+    csv_file.close()
+
+
+def fetch_specific_page_data(page, projects, count_of_repositories):
+    QUERYDATA['pageNo'] = page
+    try:
+        data = json.loads(get_data_from_url(URL, QUERYDATA))
+        data_length = len(data[0]['itemList'])
+
+        if len(data[0]['itemList']) > 0:
+            logger.info("there are :" + str(data_length) + " items in page " + str(page))
+            for item in data[0]['itemList']:
+                count_of_repositories = count_of_repositories + 1
+                projects.writerow(item.values())
+        else:
+            logger.info("No data in page " + str(page))
+
+            # TODO save the page number to a file
+
+            # get data one more time
+            count_of_repositories = get_data_more_time(page, projects, count_of_repositories)
+
+    except Exception as e:
+        logger.info("Error with page " + str(page))
+        logging.exception(e)
+
+        # TODO save the page number to a file
+    return count_of_repositories
 
 
 # main
