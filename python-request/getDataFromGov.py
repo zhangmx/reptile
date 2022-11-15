@@ -83,6 +83,29 @@ def get_data_from_url(url, data):
     return response.text
 
 
+def get_data_more_time(page, projects, count_of_repositories):
+    logger.info(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + " more time No. of pages = " + str(page))
+    QUERYDATA['pageNo'] = page
+    try:
+        data = json.loads(get_data_from_url(URL, QUERYDATA))
+        # data = json.loads(json.dumps(getUrl(URL, QUERYDATA)))
+        data_length = len(data[0]['itemList'])
+
+        if len(data[0]['itemList']) > 0:
+            logger.info("there are :" + str(data_length) + " items in page " + str(page))
+            for item in data[0]['itemList']:
+                count_of_repositories = count_of_repositories + 1
+                projects.writerow(item.values())
+        else:
+            logger.info("No data in page " + str(page))
+
+    except Exception as e:
+        logger.info("Error with page " + str(page))
+        logging.exception(e)
+    finally:
+        return count_of_repositories
+
+
 ########
 # MAIN #
 ########
@@ -127,6 +150,8 @@ def main(page=1):
                     projects.writerow(item.values())
             else:
                 logger.info("No data in page " + str(i))
+
+                count_of_repositories = get_data_more_time(i, projects, count_of_repositories)
 
         except Exception as e:
             logger.info("Error with page " + str(i))
