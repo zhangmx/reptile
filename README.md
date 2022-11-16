@@ -12,3 +12,7 @@ https://github.com/scrapy/scrapy
 ## 上面这些都没用到
 
 由于有数据请求URL，直接通过URL请求JSON数据，然后解析数据并保存。
+
+## reg tool
+
+https://regex101.com/
