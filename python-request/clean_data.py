@@ -99,8 +99,8 @@ def main():
                 row.append('')
                 row.append('')
 
-            # reg split with   \d*\.?\d+[a-zA-Z]+
-            regex = r'(\d*\.?\d+[a-zA-Z]+)'
+            # reg split with   \d*\.?\d+[a-zA-Z]+  \d*\.?\d*[kwmpKWPMＫＷ]+ 万
+            regex = r'(\d*\.?\d+[kwmpKWPMＫＷ]+)'
             res = re.split(regex, no_chinese)
             logger.info(res)
 
