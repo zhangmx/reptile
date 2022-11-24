@@ -16,3 +16,38 @@ https://github.com/scrapy/scrapy
 ## reg tool
 
 https://regex101.com/
+
+## setup
+
+```shell
+pip install -r requirements.txt
+```
+
+## run
+
+采集：
+```shell
+cd python-request
+python getDataFromGov.py
+```
+
+采集完成后，out目录下的log日志文件中找到报错的页码。如果没有报错，直接执行下面的清理数据脚本。
+
+补充数据的时候，把页码填写到:
+
+```python
+
+def get_all_lost_page():
+    pages = [288, 289, 290, 1037] # 遗漏的页码
+    fetch_all_lost_page(pages)
+
+```
+
+然后修改main函数执行这个函数。
+
+清理数据：
+
+```shell
+cd python-request
+python clean_data.py
+```
